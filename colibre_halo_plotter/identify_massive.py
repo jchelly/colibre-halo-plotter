@@ -10,7 +10,7 @@ import numpy as np
 import h5py
 
 
-def identify_massive(hbtdir, snap_nr, output_dir):
+def identify_massive(hbtdir, snap_nr, filename):
     """
     Find the most massive subhalos
     """
@@ -47,8 +47,8 @@ def identify_massive(hbtdir, snap_nr, output_dir):
             break
 
     # Write out results
-    os.makedirs(output_dir, exist_ok=True)
-    with open(f"{output_dir}/massive_halos_{snap_nr:04d}.txt", "w") as outfile:
+    os.makedirs(filename, exist_ok=True)
+    with open(filename, "w") as outfile:
         for i in range(nmax):
             print(f"{massive_pos[i,0]:.4f}, {massive_pos[i,1]:.4f}, {massive_pos[i,2]:.4f}", file=outfile)
 
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Find massive HBT-HERONS halos in a COLIBRE simulation")
     parser.add_argument("hbtdir", type=str, help="Location of the HBT output")
     parser.add_argument("snap_nr", type=int, help="Which snapshot to do")
-    parser.add_argument("output_dir", type=str, help="Where to write the output")
+    parser.add_argument("filename", type=str, help="Where to write the output")
     args = parser.parse_args()
 
     identify_massive(**vars(args))

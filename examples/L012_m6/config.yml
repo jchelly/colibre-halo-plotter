@@ -1,0 +1,17 @@
+# Where to write the output files
+out_dir: "/cosma8/data/dp004/jch/COLIBRE/HBT/L012_m6/Thermal/plots/"
+
+# Location of the simulation snapshots
+snap_dir: "/cosma8/data/dp004/colibre/Runs/L012_m6/Thermal/snapshots/"
+
+# Which snapshot to use
+snap_nr: 123
+
+# Location of HBT-HERONS outputs to plot
+branches:
+  master:
+    - hbt_dir: "/cosma8/data/dp004/colibre/Runs/L012_m6/Thermal/HBTplus/"
+    - label: "master"
+  reassign_gas_multi_fixed:
+    - hbt_dir: "/cosma8/data/dp004/jch/COLIBRE/HBT/L012_m6/Thermal/reassign_gas_multi_fixed"
+    - label: "reassign"
