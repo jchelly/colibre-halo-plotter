@@ -98,6 +98,7 @@ def plot_halo(snap_nr, read_radius, halo_file, snap_file, ptype, index, image_di
         image_filename = f"{image_dir}/{plot_name}_{ptype}_{snap_nr:04d}_halo_{index}.png"
         os.makedirs(os.path.dirname(image_filename), exist_ok=True)
         plt.savefig(image_filename)
+        plt.close()
 
 
 if __name__ == "__main__":
