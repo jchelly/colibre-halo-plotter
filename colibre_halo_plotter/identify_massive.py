@@ -11,12 +11,10 @@ import h5py
 import yaml
 
 
-def identify_massive(hbtdir, snap_nr, output_filename):
+def identify_massive(hbtdir, snap_nr, output_filename, nmax):
     """
     Find the most massive subhalos
     """
-
-    nmax = 120
 
     # Read the halo catalogue
     print("Reading halos")
@@ -72,9 +70,13 @@ if __name__ == "__main__":
     snap_nr = int(config["snap_nr"])
     print(f"Reading halo positions for snapshot {snap_nr} from {hbt_dir}")
 
+    # Number of halos to plot
+    nmax = int(config["nr_halos"])
+    print(f"Will locate {nmax} most massive halos")
+
     # Where to write the output catalogue
     out_dir = config["out_dir"]
     filename = f"{out_dir}/massive_halos_{snap_nr:03d}.txt"
 
-    identify_massive(hbt_dir, snap_nr, filename)
+    identify_massive(hbt_dir, snap_nr, filename, nmax)
     print(f"Wrote file: {filename}")

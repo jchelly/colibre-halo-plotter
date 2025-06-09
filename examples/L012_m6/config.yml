@@ -4,6 +4,9 @@ out_dir: "/cosma8/data/dp004/jch/COLIBRE/HBT/L012_m6/Thermal/test_plots/"
 # Which snapshot to use
 snap_nr: 123
 
+# How many halos to plot. Will plot the nr_halos most massive from the first HBT branch.
+nr_halos: 120
+
 # Location of HBT-HERONS outputs to plot
 branches:
   master:

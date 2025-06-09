@@ -13,7 +13,6 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 import h5py
 import unyt
-import ssio
 
 
 def plot_massive(snap_nr, output_dir, ptype, index):
