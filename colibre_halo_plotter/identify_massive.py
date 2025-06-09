@@ -8,9 +8,10 @@ import sys
 import argparse
 import numpy as np
 import h5py
+import yaml
 
 
-def identify_massive(hbtdir, snap_nr, filename):
+def identify_massive(hbtdir, snap_nr, output_filename):
     """
     Find the most massive subhalos
     """
@@ -47,8 +48,8 @@ def identify_massive(hbtdir, snap_nr, filename):
             break
 
     # Write out results
-    os.makedirs(filename, exist_ok=True)
-    with open(filename, "w") as outfile:
+    os.makedirs(os.path.dirname(output_filename), exist_ok=True)
+    with open(output_filename, "w") as outfile:
         for i in range(nmax):
             print(f"{massive_pos[i,0]:.4f}, {massive_pos[i,1]:.4f}, {massive_pos[i,2]:.4f}", file=outfile)
 
@@ -56,9 +57,24 @@ def identify_massive(hbtdir, snap_nr, filename):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Find massive HBT-HERONS halos in a COLIBRE simulation")
-    parser.add_argument("hbtdir", type=str, help="Location of the HBT output")
-    parser.add_argument("snap_nr", type=int, help="Which snapshot to do")
-    parser.add_argument("filename", type=str, help="Where to write the output")
+    parser.add_argument("config_file", type=str, help="Location of the yaml config file")
     args = parser.parse_args()
 
-    identify_massive(**vars(args))
+    # Read the config
+    with open(args.config_file, "r") as f:
+        config = yaml.safe_load(f)
+
+    # Use the first HBT branch to locate the halos
+    first_branch = list(config["branches"].keys())[0]
+    hbt_dir = config["branches"][first_branch]["hbt_dir"]
+
+    # Snapshot number we're using
+    snap_nr = int(config["snap_nr"])
+    print(f"Reading halo positions for snapshot {snap_nr} from {hbt_dir}")
+
+    # Where to write the output catalogue
+    out_dir = config["out_dir"]
+    filename = f"{out_dir}/massive_halos_{snap_nr:03d}.txt"
+
+    identify_massive(hbt_dir, snap_nr, filename)
+    print(f"Wrote file: {filename}")

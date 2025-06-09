@@ -15,6 +15,7 @@ dependencies = [
     "numpy",
     "matplotlib",
     "h5py",
+    "pyyaml",
 ]
 readme = "README.md"
 classifiers = [
