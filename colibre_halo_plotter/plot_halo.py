@@ -13,17 +13,19 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 import h5py
 import unyt
+import yaml
+
+from colibre_halo_plotter.load_region import load_region
+from colibre_halo_plotter.smooth_particles import smooth_particles
 
 
-def plot_massive(snap_nr, output_dir, ptype, index):
+def plot_halo(snap_nr, read_radius, halo_file, snap_file, ptype, index, image_dir, branch):
     """
-    Plot most massive main halos in several HBT runs on the same snapshot
+    Plot a halo from a HBT run
     """
-
-    read_radius = 6.0
 
     # Read coordinates of halos of interest
-    massive_positions = np.loadtxt(f"{output_dir}/../massive_halos_{snap_nr:04d}.txt", dtype=float, delimiter=",")
+    massive_positions = np.loadtxt(halo_file, dtype=float, delimiter=",")
 
     plt.rc('xtick', labelsize=6)
     plt.rc('ytick', labelsize=6)
@@ -31,8 +33,7 @@ def plot_massive(snap_nr, output_dir, ptype, index):
     j = index
 
     # Read particles near this halo
-    filename = f"{output_dir}/virtual_snapshots/colibre_{snap_nr:04d}.hdf5"
-    snap = ssio.load_region(filename, massive_positions[j,:], read_radius)
+    snap = load_region(snap_file, massive_positions[j,:], read_radius)
     data = getattr(snap, ptype)
     part_groupnr = data.group_nr_bound.value
     part_pos = data.coordinates % snap.metadata.boxsize[0]
@@ -89,16 +90,12 @@ def plot_massive(snap_nr, output_dir, ptype, index):
 
         # Make a plot of the particles in this halo
         print(region)
-        _, img, aximg = ssio.smooth_particles(part_pos[to_plot,:], part_mass[to_plot], snap.metadata.boxsize, 512,
-                                              region=region, cmap="plasma", norm=LogNorm(vmin=vmin, vmax=vmax, clip=True))
-        #print("vmin = ", np.amin(img[img>0]))
-        #print("vmax = ", np.amax(img[img>0]))
-
+        _, img, aximg = smooth_particles(part_pos[to_plot,:], part_mass[to_plot], snap.metadata.boxsize, 512,
+                                         region=region, cmap="plasma", norm=LogNorm(vmin=vmin, vmax=vmax, clip=True))
         plt.gca().set_aspect("equal")
 
-        branch = os.path.basename(output_dir)
         plt.suptitle(f"Halo {index}, snap {snap_nr}, {branch} : {ptype}, {plot_name}")
-        image_filename = f"{output_dir}/images/{plot_name}_{ptype}_{snap_nr:04d}_halo_{index}.png"
+        image_filename = f"{image_dir}/{plot_name}_{ptype}_{snap_nr:04d}_halo_{index}.png"
         os.makedirs(os.path.dirname(image_filename), exist_ok=True)
         plt.savefig(image_filename)
 
@@ -106,10 +103,32 @@ def plot_massive(snap_nr, output_dir, ptype, index):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Plot HBT-HERONS halos in a COLIBRE simulation")
-    parser.add_argument("snap_nr", type=int, help="Which snapshot to do")
-    parser.add_argument("output_dir", type=str, help="Where to write the output")
-    parser.add_argument("index", type=int, help="Index of halo to plot")
-    parser.add_argument("ptype", type=str, help="Particle type to show")
+    parser.add_argument("config_file", type=str, help="Location of the yaml config file")
+    parser.add_argument("first_index", type=int, help="Index of first halo to plot")
+    parser.add_argument("last_index", type=int, help="Index of last halo to plot")
     args = parser.parse_args()
 
-    plot_massive(args.snap_nr, args.output_dir, args.ptype, args.index)
+    # Read the config
+    with open(args.config_file, "r") as f:
+        config = yaml.safe_load(f)
+
+    snap_nr = int(config["snap_nr"])
+    halo_file = f"{config['out_dir']}/massive_halos_{snap_nr:03d}.txt"
+    read_radius = float(config["read_radius"])
+
+    # Loop over branches to plot
+    for branch in config["branches"]:
+
+        # Virtual snapshot location for this HBT branch
+        snap_file = config["branches"][branch]["virtual_snaps"].format(snap_nr=snap_nr)
+
+        # Output image directory for this branch
+        image_dir = f"{config['out_dir']}/{branch}"
+
+        # Make the images
+        for index in range(args.first_index, args.last_index+1):
+            for ptype in config["ptypes"]:
+                print(f"Image for branch {branch}, {ptype}, halo index {index}")
+                plot_halo(snap_nr, read_radius, halo_file, snap_file, ptype, index, image_dir, branch)
+
+    print("Done.")

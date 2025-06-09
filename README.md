@@ -21,3 +21,13 @@ This writes a text file with the halo coordinates
 
 ## Plotting a halo
 
+To plot the first halo from the list of most massive halos:
+```
+python3 -m colibre_halo_plotter.plot_halo ./config.yml 0 0
+```
+This writes image files to the directory specified in the config file. The
+two integer parameters are the indexes of the first and last halos to plot.
+To do the first ten halos:
+```
+python3 -m colibre_halo_plotter.plot_halo ./config.yml 0 9
+```

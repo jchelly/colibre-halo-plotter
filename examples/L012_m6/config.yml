@@ -2,18 +2,25 @@
 out_dir: "/cosma8/data/dp004/jch/COLIBRE/HBT/L012_m6/Thermal/test_plots/"
 
 # Which snapshot to use
-snap_nr: 123
+snap_nr: 102
 
 # How many halos to plot. Will plot the nr_halos most massive from the first HBT branch.
-nr_halos: 120
+nr_halos: 10
+
+# Radius to show around each halo (snapshot length units)
+read_radius: 2.0
+
+# Which particle types to do
+ptypes:
+  - stars
 
 # Location of HBT-HERONS outputs to plot
 branches:
   master:
     label:         "master"
     hbt_dir:       "/cosma8/data/dp004/colibre/Runs/L012_m6/Thermal/HBTplus/"
-    virtual_snaps: "/cosma8/data/dp004/jch/COLIBRE/HBT/L012_m6/Thermal/default/virtual_snapshots/colibre_{snap_nr:03d}.hdf5"
+    virtual_snaps: "/cosma8/data/dp004/jch/COLIBRE/HBT/L012_m6/Thermal/default/virtual_snapshots/colibre_{snap_nr:04d}.hdf5"
   reassign_gas_multi_fixed:
     label:         "reassign_gas_multi_fixed"
     hbt_dir:       "/cosma8/data/dp004/jch/COLIBRE/HBT/L012_m6/Thermal/reassign_gas_multi_fixed"
-    virtual_snaps: "/cosma8/data/dp004/jch/COLIBRE/HBT/L012_m6/Thermal/reassign_gas_multi_fixed/virtual_snapshots/colibre_{snap_nr:03d}.hdf5"
+    virtual_snaps: "/cosma8/data/dp004/jch/COLIBRE/HBT/L012_m6/Thermal/reassign_gas_multi_fixed/virtual_snapshots/colibre_{snap_nr:04d}.hdf5"
