@@ -39,9 +39,15 @@ def smooth_particles(pos, mass, boxsize, resolution, x_axis=0, y_axis=1,
                                                   kernel_gamma=1.8,
                                                   neighbours=57, speedup_fac=2,
                                                   dimension=3)
+    # Ensure region is a cosmo_array (and not a list)
+    if region is not None:
+        region_ca = np.empty_like(pos, shape=(6,))
+        for i in range(6):
+            region_ca[i] = region[i]
+            region = region_ca
+
     # Do periodic wrap if necessary
     if periodic_wrap and (region is not None):
-        region = unyt.unyt_array(region)
         centre = 0.5*(region[0::2]+region[1::2])
         offset = centre - 0.5*boxsize
         pos = ((pos - offset[None,:]) % boxsize) + offset
@@ -53,7 +59,6 @@ def smooth_particles(pos, mass, boxsize, resolution, x_axis=0, y_axis=1,
         y_min = pos[:,y_axis].min()
         y_max = pos[:,y_axis].max()
     else:
-        region = unyt.unyt_array(region)
         x_min, x_max = region[2*x_axis+0], region[2*x_axis+1]
         y_min, y_max = region[2*y_axis+0], region[2*y_axis+1]
 

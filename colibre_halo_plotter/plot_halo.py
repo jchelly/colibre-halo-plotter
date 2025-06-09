@@ -14,6 +14,7 @@ from matplotlib.colors import LogNorm
 import h5py
 import unyt
 import yaml
+import swiftsimio as sw
 
 from colibre_halo_plotter.load_region import load_region
 from colibre_halo_plotter.smooth_particles import smooth_particles
@@ -69,7 +70,7 @@ def plot_halo(snap_nr, read_radius, halo_file, snap_file, ptype, index, image_di
     region = [centre[0]-plot_radius, centre[0]+plot_radius,
               centre[1]-plot_radius, centre[1]+plot_radius,
               centre[2]-plot_radius, centre[2]+plot_radius]
-    region = [r*part_pos.units for r in region]
+    region = [sw.cosmo_array(r, units=part_pos.units, cosmo_factor=part_pos.cosmo_factor, comoving=True) for r in region]
 
     # vmin and vmax values for imshow log normalisation
     scaling = {
@@ -89,7 +90,6 @@ def plot_halo(snap_nr, read_radius, halo_file, snap_file, ptype, index, image_di
         plt.figure(figsize=(8,8))
 
         # Make a plot of the particles in this halo
-        print(region)
         _, img, aximg = smooth_particles(part_pos[to_plot,:], part_mass[to_plot], snap.metadata.boxsize, 512,
                                          region=region, cmap="plasma", norm=LogNorm(vmin=vmin, vmax=vmax, clip=True))
         plt.gca().set_aspect("equal")
