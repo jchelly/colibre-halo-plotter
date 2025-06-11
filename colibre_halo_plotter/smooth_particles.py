@@ -35,10 +35,14 @@ def smooth_particles(pos, mass, boxsize, resolution, x_axis=0, y_axis=1,
 
     # Compute smoothing lengths for the particles
     pos = pos % boxsize # Wrap all particles into the box
-    smoothing_length = generate_smoothing_lengths(pos, boxsize=boxsize,
-                                                  kernel_gamma=1.8,
-                                                  neighbours=57, speedup_fac=2,
-                                                  dimension=3)
+    if pos.shape[0] > 0:
+        smoothing_length = generate_smoothing_lengths(pos, boxsize=boxsize,
+                                                      kernel_gamma=1.8,
+                                                      neighbours=57, speedup_fac=2,
+                                                      dimension=3)
+    else:
+        smoothing_length = np.empty_like(pos, shape=(0,))
+
     # Ensure region is a cosmo_array (and not a list)
     if region is not None:
         region_ca = np.empty_like(pos, shape=(6,))
