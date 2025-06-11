@@ -44,7 +44,7 @@ def smooth_particles(pos, mass, boxsize, resolution, x_axis=0, y_axis=1,
         region_ca = np.empty_like(pos, shape=(6,))
         for i in range(6):
             region_ca[i] = region[i]
-            region = region_ca
+        region = region_ca
 
     # Do periodic wrap if necessary
     if periodic_wrap and (region is not None):

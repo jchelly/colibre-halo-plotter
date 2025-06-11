@@ -66,7 +66,7 @@ def plot_halo(snap_nr, read_radius, halo_file, snap_file, ptype, index, image_di
     print("Particles in FoF = ", sum(in_fof))
 
     # Decide region to plot
-    plot_radius = 1.0
+    plot_radius = read_radius
     region = [centre[0]-plot_radius, centre[0]+plot_radius,
               centre[1]-plot_radius, centre[1]+plot_radius,
               centre[2]-plot_radius, centre[2]+plot_radius]
