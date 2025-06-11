@@ -31,3 +31,11 @@ To do the first ten halos:
 ```
 python3 -m colibre_halo_plotter.plot_halo ./config.yml 0 9
 ```
+
+## Making a web page
+
+Once all of the halos has been plotted, the module can make a directory of
+images with html and javascript to display them:
+```
+python3 -m colibre_halo_plotter.make_web_page ./config.yml
+```

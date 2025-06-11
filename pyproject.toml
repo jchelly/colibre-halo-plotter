@@ -25,12 +25,14 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
-#[project.urls]
-#Homepage = ""
-#Issues = ""
+[project.urls]
+Homepage = "https://github.com/jchelly/colibre-halo-plotter"
+Issues = "https://github.com/jchelly/colibre-halo-plotter/issues"
 
 [tool.setuptools]
 packages = [
     'colibre_halo_plotter',
 ]
 
+[tool.setuptools.package-data]
+colibre_halo_plotter = ["data/*.js", "data/*.html"]
