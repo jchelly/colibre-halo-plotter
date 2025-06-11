@@ -2,6 +2,43 @@
 <html>
   <head></head>
   <body>
+
+    <p>
+      <table>
+	<tr>
+
+	  <td>
+	    <!-- Select halo to show -->
+	    <label for="halo_nr">Halo index:</label>
+	    <input type="number" id="halo_nr">
+	  </td>
+
+	  <td>
+	    <!-- Select particles to show -->
+	    <input type="radio" id="fof" name="particles" value="fof" checked="checked">
+	    <label for="fof">All in FoF</label><br>
+	    <input type="radio" id="central" name="particles" value="central">
+	    <label for="central">Bound to central</label><br>
+	    <input type="radio" id="satellite" name="particles" value="satellite">
+	    <label for="satellite">Bound to satellites</label>
+	  </td>
+
+	  <td>
+	    <!-- Select code version (possible values are in the config file) -->
+            <div id="branch"></div>
+	  </td>
+
+          <td>
+	    <!-- Select gas/stars/dm etc (possible values are in the config file) -->
+            <div id="component"></div>
+	  </td>
+
+	</tr>
+      </table>
+    </p>
+    <p>
+      <img src="halo.png" id="image"></img>
+    </p>
     <script type="module" src="./main.js"></script>
   </body>
 </html>
