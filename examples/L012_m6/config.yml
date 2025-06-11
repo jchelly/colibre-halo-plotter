@@ -13,6 +13,20 @@ read_radius: 2.0
 # Which particle types to do
 ptypes:
   - stars
+  - dark_matter
+  - gas
+
+# Colour scaling
+scaling:
+  dark_matter:
+    vmin: 1e2
+    vmax: 1e6
+  stars:
+    vmin: 1e-2
+    vmax: 1e5
+  gas:
+    vmin: 1e1
+    vmax: 1e6
 
 # Location of HBT-HERONS outputs to plot
 branches:

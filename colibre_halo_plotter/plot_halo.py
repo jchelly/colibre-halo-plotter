@@ -20,7 +20,7 @@ from colibre_halo_plotter.load_region import load_region
 from colibre_halo_plotter.smooth_particles import smooth_particles
 
 
-def plot_halo(snap_nr, read_radius, halo_file, snap_file, ptype, index, image_dir, branch):
+def plot_halo(snap_nr, read_radius, halo_file, snap_file, ptype, index, image_dir, branch, scaling):
     """
     Plot a halo from a HBT run
     """
@@ -73,12 +73,8 @@ def plot_halo(snap_nr, read_radius, halo_file, snap_file, ptype, index, image_di
     region = [sw.cosmo_array(r, units=part_pos.units, cosmo_factor=part_pos.cosmo_factor, comoving=True) for r in region]
 
     # vmin and vmax values for imshow log normalisation
-    scaling = {
-        "dark_matter" : (1e2, 1e7),
-        "stars"       : (1e-2, 1e5),
-        "gas"         : (1e1, 1e7),
-    }
-    vmin, vmax = scaling[ptype]
+    vmin = scaling[ptype]["vmin"]
+    vmax = scaling[ptype]["vmax"]
 
     # Centre for periodic wrap
     periodic_centre = massive_positions[j,:]*snap.metadata.boxsize.units
@@ -116,6 +112,7 @@ if __name__ == "__main__":
     snap_nr = int(config["snap_nr"])
     halo_file = f"{config['out_dir']}/massive_halos_{snap_nr:03d}.txt"
     read_radius = float(config["read_radius"])
+    scaling = config["scaling"]
 
     # Loop over branches to plot
     for branch in config["branches"]:
@@ -130,6 +127,6 @@ if __name__ == "__main__":
         for index in range(args.first_index, args.last_index+1):
             for ptype in config["ptypes"]:
                 print(f"Image for branch {branch}, {ptype}, halo index {index}")
-                plot_halo(snap_nr, read_radius, halo_file, snap_file, ptype, index, image_dir, branch)
+                plot_halo(snap_nr, read_radius, halo_file, snap_file, ptype, index, image_dir, branch, scaling)
 
     print("Done.")
